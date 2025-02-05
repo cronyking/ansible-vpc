@@ -5,7 +5,7 @@
   tasks:
     - name: Import VPC Variables
       include_vars:
-        file: vars/vpc_setup.yml  # Ensure the correct path with .yml extension
+        file: vars/vpc_setup.yml  # Ensure the file extension is correct
 
     - name: Debug variables (Optional: to verify if variables are loaded)
       debug:
@@ -21,4 +21,5 @@
         tenancy: "default"
         state: "{{ state }}"
       register: vpc_info
+
 
