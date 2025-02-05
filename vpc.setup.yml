@@ -1,19 +1,23 @@
 - hosts: localhost
   connection: local
-  gather_facts: no  # Fixed from "gather_fact"
+  gather_facts: no
 
   tasks:
     - name: Import VPC Variables
-      include_vars: vars/vpc_setup
+      include_vars:
+        file: vars/vpc_setup.yml  # Ensure this is the correct path with the .yml extension
+
+    - name: Debug variables (Optional: to verify if variables are loaded)
+      debug:
+        msg: "VPC Name: {{ vpc_name }}, CIDR Block: {{ vpccidr }}, Region: {{ region }}"
 
     - name: Create vprofiles VPC
-      ec2_vpc_net:  
+      amazon.aws.ec2_vpc_net:
         name: "{{ vpc_name }}"
         cidr_block: "{{ vpccidr }}"
         region: "{{ region }}"
-        enable_dns_support: yes
-        enable_dns_hostnames: yes
+        enable_dns_support: true
+        enable_dns_hostnames: true
         tenancy: "default"
         state: "{{ state }}"
-      register: vpc_out
-      
+      register: vpc_info
