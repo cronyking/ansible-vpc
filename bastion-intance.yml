@@ -5,10 +5,12 @@
   gather_facts: no
   tasks:
     - name: Import VPC setup Variable
-      include_vars: vars/vpc_setup
+      include_vars:
+        file: vars/vpc_setup
 
-    - name: Import VPC setup Variable
-      include_vars: vars/output_vars
+    - name: Import output variables
+      include_vars:
+        file: vars/output_vars
 
     - name: Create vprofile ec2 key
       amazon.aws.ec2_key:
@@ -20,7 +22,7 @@
       copy:
         content: "{{ key_out.key.private_key }}"
         dest: "./bastion-key.pem"
-        mode: 0600
+        mode: '0600'
       when: key_out.changed
 
     - name: Create Sec Grp for bastion host
@@ -36,7 +38,7 @@
             cidr_ip: "{{ MYIP }}"
       register: BastionSG_out
 
-    - name: Creating Bastion Host
+    - name: Create Bastion Host
       amazon.aws.ec2_instance:
         key_name: vprofile-key
         region: "{{ region }}"
@@ -49,7 +51,7 @@
           Project: Vprofile
           Owner: DevOps Team
         count: 1
-        security_groups: 
+        security_groups:
           - Bastion-host-sg
-        vpc_subnet_id: "{{ pubsub1id }}"
+        subnet_id: "{{ pubsub1id }}"
       register: bastionHost_out
