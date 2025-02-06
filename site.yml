@@ -1,0 +1,3 @@
+---
+-  import_playbook: vpc.set.yml
+-  import_playbook: bastion-intance.yml
